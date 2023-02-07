@@ -4,9 +4,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,14 +24,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JDialog;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
 import java.awt.Color;
 import java.awt.Font;
 
 public class MenubarCustom extends JMenuBar implements ActionListener {
     protected ArrayList<JMenu> menuList = new ArrayList<>();
-    protected JMenu font;
+    protected JMenu font, help;
     protected JMenuItem menuItem_new, menuItem_open, menuItem_save, menuItem_saveAs,
-            menuItem_color, menuItem_size, menuItem_style, menuItem_close;
+            menuItem_color, menuItem_size, menuItem_style, menuItem_close, menuItem_help;
     protected File fileCurrent;
     public Notepad notepad;
     FileOperation fileOperation;
@@ -51,7 +59,11 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
         menuList.add(new JMenu("File"));
         menuList.add(new JMenu("Edit"));
         menuList.add(new JMenu("Selection"));
-        menuList.add(new JMenu("Help"));
+
+        help = new JMenu("Help");
+        menuItem_help = new JMenuItem("Help");
+        help.add(menuItem_help);
+        menuList.add(help);
 
         menuItem_new = new JMenuItem("New");
         menuItem_open = new JMenuItem("Open");
@@ -105,6 +117,25 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
         return filePath;
     }
 
+    public void showHelpDialog() {
+        JDialog dialog = new JDialog(this.notepad.frame, "Help dialog", true);
+        JPanel jp = new JPanel();
+        jp.setLayout(new BoxLayout(jp, BoxLayout.Y_AXIS));
+
+        dialog.setLayout(new FlowLayout());
+        JLabel heading = new JLabel("Harryguci", SwingConstants.CENTER);
+        heading.setFont(new Font("Arial", Font.BOLD, 24));
+
+        jp.add(heading);
+        jp.add(new JLabel("Hello my name is Harryguci. This is my application. It was built in 2023."));
+
+        dialog.add(jp);
+        dialog.pack();
+        dialog.setSize(dialog.getWidth() + 150, dialog.getHeight());
+        dialog.setLocationRelativeTo(this.notepad.frame);
+        dialog.setVisible(true);
+    }
+
     public static void main(String[] args) {
         // JFrame frame = new JFrame("Frame demo");
 
@@ -125,6 +156,7 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
         menuItem_size.addActionListener(listener);
         menuItem_style.addActionListener(listener);
         menuItem_close.addActionListener(listener);
+        menuItem_help.addActionListener(listener);
 
         menuItem_new.addActionListener(this);
         menuItem_open.addActionListener(this);
@@ -134,6 +166,7 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
         menuItem_size.addActionListener(this);
         menuItem_style.addActionListener(this);
         menuItem_close.addActionListener(this);
+        menuItem_help.addActionListener(this);
     }
 
     @Override
@@ -202,15 +235,10 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
             dialog.add(backgroundButton, BorderLayout.EAST);
             dialog.setLocationRelativeTo(this.notepad.frame);
             dialog.setSize(300, 150);
-            // dialog.setBounds(100, 100, 300, 300);
-            // dialog.pack();
             dialog.setVisible(true);
 
-            // Color userInput = JColorChooser.showDialog(this.notepad.frame, "Select a
-            // color", Color.BLACK);
-            // if (userInput != null) {
-            // this.notepad.mainArea.textArea.setForeground(userInput);
-            // }
+        } else if (current == menuItem_help) {
+            showHelpDialog();
         } else {
             System.out.println("[MENU BAR] : No match");
         }

@@ -56,7 +56,7 @@ public class CustomScrollBarUI extends BasicScrollBarUI {
         }
         color = new Color(color.getRed(), color.getGreen(), color.getBlue(), 100);
 
-        g2.setPaint(color);
+        g2.setPaint(color); 
         g2.fillRoundRect(r.x, r.y, r.width, r.height, 5, 5);
         g2.setPaint(Color.WHITE);
         g2.drawRoundRect(r.x, r.y, r.width, r.height, 5, 5);
