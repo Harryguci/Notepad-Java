@@ -24,7 +24,7 @@ public class Notepad {
         menuBar = new MenubarCustom(this);
         menuBar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-
+                // System.out.println("TEST");
             }
         });
 

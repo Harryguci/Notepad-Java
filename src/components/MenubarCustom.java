@@ -9,9 +9,17 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JDialog;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 
 public class MenubarCustom extends JMenuBar implements ActionListener {
     protected ArrayList<JMenu> menuList = new ArrayList<>();
@@ -108,14 +116,6 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
 
     public void addActionListener(ActionListener listener) {
         System.out.println("Add action listener");
-        menuItem_new.addActionListener(this);
-        menuItem_open.addActionListener(this);
-        menuItem_save.addActionListener(this);
-        menuItem_saveAs.addActionListener(this);
-        menuItem_color.addActionListener(this);
-        menuItem_size.addActionListener(this);
-        menuItem_style.addActionListener(this);
-        menuItem_close.addActionListener(this);
 
         menuItem_new.addActionListener(listener);
         menuItem_open.addActionListener(listener);
@@ -125,11 +125,19 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
         menuItem_size.addActionListener(listener);
         menuItem_style.addActionListener(listener);
         menuItem_close.addActionListener(listener);
+
+        menuItem_new.addActionListener(this);
+        menuItem_open.addActionListener(this);
+        menuItem_save.addActionListener(this);
+        menuItem_saveAs.addActionListener(this);
+        menuItem_color.addActionListener(this);
+        menuItem_size.addActionListener(this);
+        menuItem_style.addActionListener(this);
+        menuItem_close.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-
         Object current = event.getSource();
 
         if (current == menuItem_open) {
@@ -146,6 +154,65 @@ public class MenubarCustom extends JMenuBar implements ActionListener {
             }
         } else if (current == menuItem_new) {
             fileOperation.newFile();
+        } else if (current == menuItem_size) {
+            System.out.println("Font size");
+            int fs;
+            String userInput;
+            A: do {
+                userInput = JOptionPane.showInputDialog(this.notepad.frame, "Enter font size");
+                try {
+                    fs = Integer.parseInt(userInput);
+                    break A;
+                } catch (NumberFormatException err) {
+                    JOptionPane.showMessageDialog(this.notepad.frame, "You can only enter a number");
+                }
+            } while (true);
+
+            if (fs > 0) {
+                Font currentFont = this.notepad.mainArea.textArea.getFont();
+                Font newFont = new Font(currentFont.getFamily(), currentFont.getStyle(), fs);
+
+                this.notepad.mainArea.textArea.setFont(newFont);
+            }
+        } else if (current == menuItem_color) {
+            JDialog dialog = new JDialog(this.notepad.frame, "Color Dialog");
+            dialog.setLayout(new GridLayout(1, 2));
+            JButton textButton, backgroundButton;
+            textButton = new JButton("Text");
+            backgroundButton = new JButton("Background");
+
+            textButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    Color userInput = JColorChooser.showDialog(notepad.frame, "Select a color", Color.BLACK);
+                    if (userInput != null) {
+                        notepad.mainArea.textArea.setForeground(userInput);
+                    }
+                }
+            });
+            backgroundButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent event) {
+                    Color userInput = JColorChooser.showDialog(notepad.frame, "Select a color", Color.BLACK);
+                    if (userInput != null) {
+                        notepad.mainArea.textArea.setBackground(userInput);
+                    }
+                }
+            });
+
+            dialog.add(textButton, BorderLayout.WEST);
+            dialog.add(backgroundButton, BorderLayout.EAST);
+            dialog.setLocationRelativeTo(this.notepad.frame);
+            dialog.setSize(300, 150);
+            // dialog.setBounds(100, 100, 300, 300);
+            // dialog.pack();
+            dialog.setVisible(true);
+
+            // Color userInput = JColorChooser.showDialog(this.notepad.frame, "Select a
+            // color", Color.BLACK);
+            // if (userInput != null) {
+            // this.notepad.mainArea.textArea.setForeground(userInput);
+            // }
+        } else {
+            System.out.println("[MENU BAR] : No match");
         }
     }
 }

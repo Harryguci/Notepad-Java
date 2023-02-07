@@ -16,9 +16,11 @@ public class MainArea extends JPanel implements KeyListener {
     public MainArea(Notepad notepad) {
         super(new BorderLayout());
         this.notepad = notepad;
-        setForeground(Color.BLUE);
         textArea = new JTextArea(30, 50);
+        textArea.setForeground(Color.BLUE);
+        
         add(textArea, BorderLayout.CENTER);
+        
         textArea.setFont(new Font("Arial", Font.PLAIN, 14));
         setBackground(null);
     }
